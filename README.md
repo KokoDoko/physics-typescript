@@ -90,41 +90,72 @@ Matter.Composite.add(this.engine.world, [boxOne, boxTwo])
 <br>
 <br>
 
-## DOM
+# Voorbeeld
 
-We gaan de physics posities gebruiken om DOM elementen te positioneren. Daarvoor moeten we wel onthouden welk DOM element bij welk physics element hoort. Dat doen we in de class die ook het DOM element maakt:
+## Game
+
+De `game.ts` class maakt de physics world. Daarna maken we game elementen aan, zoals een `Box`. 
 
 ```typescript
-class Box {
-    constructor(){
-        // create physics object
-        this.physicsBox = ...
+class Game {
 
-        // create div
-        this.div = ...
+    private engine : Matter.Engine
+    private box : Box
+        
+    constructor() {
+        this.engine = Matter.Engine.create()
+        this.box = new Box(this.engine.world)
+    }
+
+    gameLoop(){
+        Matter.Engine.update(this.engine, 1000 / 60) 
+        this.box.update()
+        requestAnimationFrame(() => this.gameLoop())
     }
 }
 ```
-De `Box` class kan nu de positie van het physics object opvragen, en daar het DOM element neer zetten. 
 
-Let hierbij op dat een physics element zijn *center position* terug geeft. Om die reden moet je de `x,y` nog aanpassen met de hoogte en breedte van het object:
+## Box
+
+De Box class voegt een physics box toe aan de physics world, en maakt een DOM element. 
 
 ```typescript
-let pos = this.physicsBox.position       // center point
-let angle = this.physicsBox.angle        // hoek
-let degrees = angle * (180 / Math.PI)
+class Box {
+    constructor(world : Matter.Composite){
+        // physics object
+        this.physicsBox = Matter.Bodies.rectangle(x, y, w, h, options)
+        Matter.Composite.add(world, this.physicsBox)
 
-// div positioneren
-this.div.style.transform = `translate(${pos.x - (this.width/2)}px, ${pos.y-(this.height/2)}px) rotate(${degrees}deg)`
+        // create div
+        this.div = document.createElement("crate")
+        document.body.appendChild(this.div)
+    }
+}
+```
+<br>
+
+### Update de box positie
+
+De Box class kan in de update functie telkens het DOM element op dezelfde plek zetten als het physics element:
+
+```typescript
+update() {
+    let pos = this.physicsBox.position // physics position
+    let angle = this.physicsBox.angle
+    let degrees = angle * (180 / Math.PI)
+
+    this.div.style.transform = `translate(${pos.x - (this.width/2)}px, ${pos.y-(this.height/2)}px) rotate(${degrees}deg)`
+}
 ```
 
+
 <br>
 <br>
 <br>
 
-## Beweging
+## Controls
 
-Om te bewegen gebruik je 
+Om een karakter of vijand te bewegen gebruik je 
 
 - `Matter.body.translate` - Hiermee "hardcode" je de nieuwe positie ongeacht physics. Dit gebruik je voor **static** elementen zoals een platform.
 - `Matter.Body.setVelocity` - Hiermee zet je een nieuwe snelheid. Bv. om een **player** of een **enemy** naar links / rechts te bewegen.
