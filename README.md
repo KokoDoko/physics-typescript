@@ -1,8 +1,10 @@
 # Physics met Matter.js, Typescript en Parcel
 
-[MatterJS](https://brm.io/matter-js/) berekent physics simulaties. [Bekijk de demo's](https://brm.io/matter-js/demo/#avalanche) en de [broncode van de demo's](https://github.com/liabru/matter-js/blob/master/examples/avalanche.js)
+Dit project bevat een demo waarbij we **MatterJS** physics gebruiken in een **Typescript** Object-Oriented project.
 
 ![barrels](./dev/images/physics.gif)
+
+[MatterJS](https://brm.io/matter-js/) berekent physics simulaties. [Bekijk de demo's](https://brm.io/matter-js/demo/#avalanche) en de [broncode van de demo's](https://github.com/liabru/matter-js/blob/master/examples/avalanche.js)
 
 [ParcelJS](https://parceljs.org) bouwt een project van je `dev` map. Daarbij worden modules van MatterJS en je eigen project samengevoegd. Parcel zet Typescript om naar Javascript. Ook je afbeeldingen, css en html worden overgezet naar de `dist` folder!
 
